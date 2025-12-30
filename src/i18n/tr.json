@@ -1,0 +1,148 @@
+{
+  "common": {
+    "appName": "CV Oluşturucu",
+    "create": "Oluştur",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "skip": "Atla",
+    "next": "İleri",
+    "back": "Geri",
+    "done": "Tamam",
+    "download": "İndir",
+    "share": "Paylaş"
+  },
+  "welcome": {
+    "title": "Mükemmel CV'ni Oluştur",
+    "subtitle": "Dakikalar içinde profesyonel CV şablonları",
+    "createButton": "CV Oluştur",
+    "templatesPreview": "8 profesyonel şablon arasından seç"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "email": "E-posta",
+    "password": "Şifre",
+    "fullName": "Ad Soyad",
+    "confirmPassword": "Şifre Tekrar",
+    "forgotPassword": "Şifremi Unuttum",
+    "signInWithGoogle": "Google ile Giriş Yap",
+    "dontHaveAccount": "Hesabın yok mu?",
+    "alreadyHaveAccount": "Zaten hesabın var mı?",
+    "createAccount": "Hesap Oluştur"
+  },
+  "home": {
+    "title": "Şablon Seç",
+    "categories": {
+      "student": "Öğrenciler & Juniorlar",
+      "professional": "Profesyoneller",
+      "creative": "Kreatif",
+      "academic": "Akademik"
+    },
+    "atsLabel": "ATS Uyumlu",
+    "atsTag": "ATS Uyumlu"
+  },
+  "templates": {
+    "studentClean": "Öğrenci Temiz",
+    "juniorTech": "Junior Teknik",
+    "modernProfessional": "Modern Profesyonel",
+    "corporateClassic": "Kurumsal Klasik",
+    "creativeMinimal": "Kreatif Minimal",
+    "creativeBold": "Kreatif Cesur",
+    "internationalSimple": "Uluslararası Basit",
+    "academicCV": "Akademik CV"
+  },
+  "wizard": {
+    "steps": {
+      "personalInfo": "Kişisel Bilgiler",
+      "education": "Eğitim",
+      "experience": "Deneyim",
+      "projects": "Projeler",
+      "skills": "Yetenekler",
+      "extras": "Ekstralar"
+    },
+    "personalInfo": {
+      "fullName": "Ad Soyad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "location": "Konum",
+      "title": "Meslek Unvanı",
+      "summary": "Özet"
+    },
+    "education": {
+      "school": "Okul/Üniversite",
+      "degree": "Derece",
+      "field": "Alan",
+      "startDate": "Başlangıç Tarihi",
+      "endDate": "Bitiş Tarihi",
+      "current": "Halen devam ediyor",
+      "gpa": "Not Ortalaması",
+      "description": "Açıklama",
+      "add": "Eğitim Ekle"
+    },
+    "experience": {
+      "company": "Şirket",
+      "position": "Pozisyon",
+      "location": "Konum",
+      "startDate": "Başlangıç Tarihi",
+      "endDate": "Bitiş Tarihi",
+      "current": "Halen çalışıyor",
+      "description": "Açıklama",
+      "add": "Deneyim Ekle"
+    },
+    "projects": {
+      "title": "Proje Adı",
+      "description": "Açıklama",
+      "technologies": "Teknolojiler",
+      "link": "Link",
+      "add": "Proje Ekle"
+    },
+    "skills": {
+      "name": "Yetenek Adı",
+      "level": "Seviye",
+      "add": "Yetenek Ekle"
+    },
+    "extras": {
+      "languages": "Diller",
+      "certificates": "Sertifikalar",
+      "links": "Bağlantılar",
+      "add": "Ekle"
+    }
+  },
+  "preview": {
+    "title": "CV Önizleme",
+    "download": "PDF İndir",
+    "save": "CV'yi Kaydet"
+  },
+  "myCVs": {
+    "title": "CV'lerim",
+    "empty": "Henüz hiç CV oluşturmadınız",
+    "createFirst": "İlk CV'nizi oluşturun",
+    "createdAt": "Oluşturulma",
+    "template": "Şablon",
+    "loginRequired": "CV'lerinizi görmek için lütfen giriş yapın"
+  },
+  "tabs": {
+    "home": "Ana Sayfa",
+    "myCVs": "CV'lerim",
+    "settings": "Ayarlar"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil",
+    "theme": "Tema",
+    "profile": "Profil",
+    "logout": "Çıkış Yap",
+    "darkMode": "Karanlık Mod",
+    "lightMode": "Aydınlık Mod",
+    "system": "Sistem",
+    "english": "İngilizce",
+    "turkish": "Türkçe",
+    "selectLanguage": "Bir dil seçin",
+    "confirmLanguageChange": "Dili Değiştir",
+    "confirmLanguageChangeMessage": "Dili değiştirmek istiyor musunuz? Değişikliklerin uygulanması için uygulama yeniden başlatılacak.",
+    "loginRequired": "Giriş Gerekli",
+    "loginRequiredMessage": "Tüm özelliklere erişmek ve ayarlarınızı kaydetmek için lütfen giriş yapın."
+  }
+}

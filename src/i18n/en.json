@@ -1,0 +1,148 @@
+{
+  "common": {
+    "appName": "CV Builder",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "download": "Download",
+    "share": "Share"
+  },
+  "welcome": {
+    "title": "Create Your Perfect CV",
+    "subtitle": "Professional CV templates in minutes",
+    "createButton": "Create Your CV",
+    "templatesPreview": "Choose from 8 professional templates"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "signInWithGoogle": "Sign in with Google",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "createAccount": "Create Account"
+  },
+  "home": {
+    "title": "Choose a Template",
+    "categories": {
+      "student": "Students & Juniors",
+      "professional": "Professionals",
+      "creative": "Creative",
+      "academic": "Academic"
+    },
+    "atsLabel": "ATS Friendly",
+    "atsTag": "ATS Friendly"
+  },
+  "templates": {
+    "studentClean": "Student Clean",
+    "juniorTech": "Junior Tech",
+    "modernProfessional": "Modern Professional",
+    "corporateClassic": "Corporate Classic",
+    "creativeMinimal": "Creative Minimal",
+    "creativeBold": "Creative Bold",
+    "internationalSimple": "International Simple",
+    "academicCV": "Academic CV"
+  },
+  "wizard": {
+    "steps": {
+      "personalInfo": "Personal Info",
+      "education": "Education",
+      "experience": "Experience",
+      "projects": "Projects",
+      "skills": "Skills",
+      "extras": "Extras"
+    },
+    "personalInfo": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "location": "Location",
+      "title": "Professional Title",
+      "summary": "Summary"
+    },
+    "education": {
+      "school": "School/University",
+      "degree": "Degree",
+      "field": "Field of Study",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "Currently studying",
+      "gpa": "GPA",
+      "description": "Description",
+      "add": "Add Education"
+    },
+    "experience": {
+      "company": "Company",
+      "position": "Position",
+      "location": "Location",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "Currently working",
+      "description": "Description",
+      "add": "Add Experience"
+    },
+    "projects": {
+      "title": "Project Title",
+      "description": "Description",
+      "technologies": "Technologies",
+      "link": "Link",
+      "add": "Add Project"
+    },
+    "skills": {
+      "name": "Skill Name",
+      "level": "Level",
+      "add": "Add Skill"
+    },
+    "extras": {
+      "languages": "Languages",
+      "certificates": "Certificates",
+      "links": "Links",
+      "add": "Add"
+    }
+  },
+  "preview": {
+    "title": "Preview Your CV",
+    "download": "Download PDF",
+    "save": "Save CV"
+  },
+  "myCVs": {
+    "title": "My CVs",
+    "empty": "You haven't created any CVs yet",
+    "createFirst": "Create your first CV",
+    "createdAt": "Created",
+    "template": "Template",
+    "loginRequired": "Please login to view your CVs"
+  },
+  "tabs": {
+    "home": "Home",
+    "myCVs": "My CVs",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "profile": "Profile",
+    "logout": "Logout",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "system": "System",
+    "english": "English",
+    "turkish": "Turkish",
+    "selectLanguage": "Select a language",
+    "confirmLanguageChange": "Change Language",
+    "confirmLanguageChangeMessage": "Do you want to change the language? The app will restart to apply changes.",
+    "loginRequired": "Login Required",
+    "loginRequiredMessage": "Please login to access all features and save your settings."
+  }
+}
