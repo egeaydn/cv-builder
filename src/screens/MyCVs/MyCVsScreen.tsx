@@ -64,6 +64,7 @@ export const MyCVsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 30,
   },
   emptyContainer: {
     flex: 1,
@@ -101,9 +102,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     padding: 20,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     paddingHorizontal: 20,
+    textAlign: 'center',
+    marginTop: 8,
   },
 });

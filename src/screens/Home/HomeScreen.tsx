@@ -16,6 +16,7 @@ import { TEMPLATE_CATEGORIES } from '../../data/templates';
 import { useI18n } from '../../i18n/I18nContext';
 import { RootStackParamList } from '../../navigation';
 import { useTheme } from '../../theme';
+import { useAuth } from '@/src/services/AuthContext';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -27,35 +28,26 @@ const CARD_WIDTH = width * 0.75;
 const CARD_MARGIN = 10;
 
 export const HomeScreen: React.FC = () => {
+  const authentication = useAuth();
   const { colors } = useTheme();
   const { t } = useI18n();
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const handleTemplateSelect = (templateId: string) => {
+    if (!authentication.isAuthenticated) {
+      navigation.navigate('Login');
+      return;
+    }
     navigation.navigate('CVWizard', { templateId });
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Modern Header with Gradient */}
-      <LinearGradient
-        colors={[colors.primary, colors.primaryLight || colors.primary]}
-        style={styles.headerGradient}
-      >
-        <Text style={styles.headerTitle}>
-          {t('home.title', { defaultValue: 'Choose Your Template' })}
-        </Text>
-        <Text style={styles.headerSubtitle}>
-          {t('home.subtitle', { defaultValue: 'Select a professional CV template' })}
-        </Text>
-      </LinearGradient>
-
+    <View style={[styles.container, { backgroundColor: colors.background }]}>     
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-
       {/* Categories with Horizontal Carousels */}
       {TEMPLATE_CATEGORIES.map((category) => (
         <View key={category.id} style={styles.categorySection}>
@@ -143,22 +135,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerGradient: {
-    paddingTop: 60,
-    paddingBottom: 32,
-    paddingHorizontal: 24,
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.9,
-  },
   scrollView: {
     flex: 1,
   },
@@ -166,7 +142,8 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   categorySection: {
-    marginBottom: 32,
+    marginBottom: 12,
+    marginTop: 26,
   },
   categoryHeader: {
     flexDirection: 'row',
