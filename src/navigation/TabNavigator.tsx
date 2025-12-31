@@ -56,7 +56,7 @@ export const TabNavigator: React.FC = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: t('tabs.home'),
-          title: t('tabs.home'),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -64,7 +64,7 @@ export const TabNavigator: React.FC = () => {
         component={MyCVsScreen}
         options={{
           tabBarLabel: t('tabs.myCVs'),
-          title: t('tabs.myCVs'),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -72,7 +72,7 @@ export const TabNavigator: React.FC = () => {
         component={SettingsScreen}
         options={{
           tabBarLabel: t('tabs.settings'),
-          title: t('tabs.settings'),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

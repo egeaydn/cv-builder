@@ -1,8 +1,11 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import {
   Dimensions,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,22 +32,29 @@ export const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const handleTemplateSelect = (templateId: string) => {
-    // TODO: Navigate to CV Wizard with selected template
-    console.log('Selected template:', templateId);
+    navigation.navigate('CVWizard', { templateId });
   };
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          {t('home.title')}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Modern Header with Gradient */}
+      <LinearGradient
+        colors={[colors.primary, colors.primaryLight || colors.primary]}
+        style={styles.headerGradient}
+      >
+        <Text style={styles.headerTitle}>
+          {t('home.title', { defaultValue: 'Choose Your Template' })}
         </Text>
-      </View>
+        <Text style={styles.headerSubtitle}>
+          {t('home.subtitle', { defaultValue: 'Select a professional CV template' })}
+        </Text>
+      </LinearGradient>
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
 
       {/* Categories with Horizontal Carousels */}
       {TEMPLATE_CATEGORIES.map((category) => (
@@ -78,20 +88,23 @@ export const HomeScreen: React.FC = () => {
                   },
                 ]}
                 onPress={() => handleTemplateSelect(template.id)}
-                activeOpacity={0.8}
+                activeOpacity={0.85}
               >
                 {/* Template Preview */}
                 <View
                   style={[
                     styles.templatePreview,
-                    { backgroundColor: colors.background },
+                    { backgroundColor: colors.surface },
                   ]}
                 >
-                  <Text
-                    style={[styles.previewText, { color: colors.textSecondary }]}
-                  >
-                    {t(template.nameKey)}
-                  </Text>
+                  <Image
+                    source={template.previewImage}
+                    style={styles.previewImage}
+                    resizeMode="cover"
+                  />
+                  <View style={styles.previewOverlay}>
+                    <Ionicons name="eye-outline" size={24} color="#FFFFFF" />
+                  </View>
                 </View>
 
                 {/* Template Info */}
@@ -106,11 +119,12 @@ export const HomeScreen: React.FC = () => {
                     <View
                       style={[
                         styles.atsTag,
-                        { backgroundColor: colors.success + '20' },
+                        { backgroundColor: colors.secondary + '15' },
                       ]}
                     >
-                      <Text style={[styles.atsText, { color: colors.success }]}>
-                        {t('home.atsTag')}
+                      <Ionicons name="checkmark-circle" size={14} color={colors.secondary} />
+                      <Text style={[styles.atsText, { color: colors.secondary }]}>
+                        {t('home.atsTag', { defaultValue: 'ATS Friendly' })}
                       </Text>
                     </View>
                   )}
@@ -120,7 +134,8 @@ export const HomeScreen: React.FC = () => {
           </ScrollView>
         </View>
       ))}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -128,16 +143,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {
-    paddingVertical: 20,
-  },
-  header: {
+  headerGradient: {
+    paddingTop: 60,
+    paddingBottom: 32,
     paddingHorizontal: 24,
-    marginBottom: 24,
   },
-  title: {
-    fontSize: 28,
+  headerTitle: {
+    fontSize: 32,
     fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 8,
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    opacity: 0.9,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingVertical: 24,
   },
   categorySection: {
     marginBottom: 32,
@@ -166,16 +192,26 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     overflow: 'hidden',
-    maxHeight: 280,
+    maxHeight: 320,
   },
   templatePreview: {
-    height: 200,
+    height: 220,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  previewImage: {
+    width: '100%',
+    height: '100%',
+  },
+  previewOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  previewText: {
-    fontSize: 18,
-    fontWeight: '600',
   },
   templateInfo: {
     padding: 12,
@@ -190,12 +226,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   atsTag: {
-    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,
+    gap: 4,
   },
   atsText: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 });

@@ -11,7 +11,8 @@
     "back": "Back",
     "done": "Done",
     "download": "Download",
-    "share": "Share"
+    "share": "Share",
+    "ok": "OK"
   },
   "welcome": {
     "title": "Create Your Perfect CV",
@@ -33,7 +34,8 @@
     "createAccount": "Create Account"
   },
   "home": {
-    "title": "Choose a Template",
+    "title": "Choose Your Template",
+    "subtitle": "Select a professional CV template",
     "categories": {
       "student": "Students & Juniors",
       "professional": "Professionals",
@@ -108,12 +110,29 @@
       "certificates": "Certificates",
       "links": "Links",
       "add": "Add"
+    },
+    "title": "Create CV",
+    "step": "Step {{step}} of {{total}}",
+    "finish": "Finish",
+    "comingSoon": "Coming soon...",
+    "validation": {
+      "title": "Validation Error",
+      "required": "Please fill in required fields"
+    },
+    "success": {
+      "title": "Success",
+      "message": "Your CV has been created successfully!"
     }
   },
   "preview": {
     "title": "Preview Your CV",
     "download": "Download PDF",
-    "save": "Save CV"
+    "save": "Save CV",
+    "saveSuccess": "Success",
+    "saveMessage": "CV saved successfully!",
+    "saveError": "Failed to save CV",
+    "pdfError": "Failed to generate PDF",
+    "error": "Error"
   },
   "myCVs": {
     "title": "My CVs",

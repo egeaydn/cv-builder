@@ -334,6 +334,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 16,
     overflow: 'hidden',
+    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 14,

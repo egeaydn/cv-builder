@@ -8,7 +8,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.studentClean',
     category: 'student',
     isATS: true,
-    previewImage: '/assets/templates/student-clean.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Clean and professional template for students and entry-level positions',
   },
   {
@@ -17,7 +17,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.juniorTech',
     category: 'student',
     isATS: true,
-    previewImage: '/assets/templates/junior-tech.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Tech-focused template for junior developers and IT professionals',
   },
   
@@ -28,7 +28,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.modernProfessional',
     category: 'professional',
     isATS: true,
-    previewImage: '/assets/templates/modern-professional.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Modern and sleek design for experienced professionals',
   },
   {
@@ -37,7 +37,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.corporateClassic',
     category: 'professional',
     isATS: true,
-    previewImage: '/assets/templates/corporate-classic.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Traditional corporate style for formal industries',
   },
   
@@ -48,7 +48,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.creativeMinimal',
     category: 'creative',
     isATS: false,
-    previewImage: '/assets/templates/creative-minimal.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Minimalist design for creative professionals',
   },
   {
@@ -57,7 +57,7 @@ export const CV_TEMPLATES: Template[] = [
     nameKey: 'templates.creativeBold',
     category: 'creative',
     isATS: false,
-    previewImage: '/assets/templates/creative-bold.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Bold and eye-catching design for portfolios',
   },
   
@@ -68,7 +68,7 @@ export const CV_TEMPLATES: Template[] = [
     name: 'International Simple',
     category: 'academic',
     isATS: true,
-    previewImage: '/assets/templates/international-simple.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Simple and universal format for international applications',
   },
   {
@@ -77,7 +77,7 @@ export const CV_TEMPLATES: Template[] = [
     name: 'Academic CV',
     category: 'academic',
     isATS: true,
-    previewImage: '/assets/templates/academic-cv.png',
+    previewImage: require('../../assets/templates/placeholder.png'),
     description: 'Comprehensive format for academic and research positions',
   },
 ];

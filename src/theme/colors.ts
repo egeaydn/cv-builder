@@ -1,39 +1,45 @@
 export const Colors = {
   light: {
-    primary: '#5A7ACD', // Main brand blue
-    secondary: '#FEB05D', // Accent orange
-    background: '#F5F2F2', // Light gray background
-    surface: '#FFFFFF', // White surface
+    primary: '#050E3C', // Main brand dark blue
+    primaryLight: '#002455', // Lighter dark blue
+    secondary: '#FF3838', // Accent red
+    secondaryDark: '#DC0000', // Darker red
+    background: '#FFFFFF', // White background
+    surface: '#F8F9FA', // Light gray surface
     card: '#FFFFFF',
-    text: '#2B2A2A', // Dark text
-    textSecondary: '#6B6B6B',
-    border: '#E0E0E0',
-    error: '#FF3B30',
-    success: '#34C759',
-    warning: '#FF9500',
-    info: '#5A7ACD',
+    text: '#050E3C', // Dark text
+    textSecondary: '#6B7280',
+    border: '#E5E7EB',
+    error: '#DC0000',
+    errorLight: '#FF3838',
+    success: '#10B981',
+    warning: '#F59E0B',
+    info: '#002455',
     // ATS Friendly colors
-    atsBlue: '#2C3E50',
-    atsGray: '#7F8C8D',
-    atsLightGray: '#ECF0F1',
+    atsBlue: '#050E3C',
+    atsGray: '#6B7280',
+    atsLightGray: '#F3F4F6',
   },
   dark: {
-    primary: '#5A7ACD', // Main brand blue
-    secondary: '#FEB05D', // Accent orange
-    background: '#2B2A2A', // Dark background
-    surface: '#3A3939',
-    card: '#3A3939',
-    text: '#F5F2F2', // Light text
-    textSecondary: '#B0B0B0',
-    border: '#4A4A4A',
-    error: '#FF453A',
-    success: '#32D74B',
-    warning: '#FF9F0A',
-    info: '#5A7ACD',
+    primary: '#FF3838', // Main brand red (for dark mode)
+    primaryLight: '#DC0000', // Darker red
+    secondary: '#002455', // Accent blue
+    secondaryDark: '#050E3C', // Darker blue
+    background: '#050E3C', // Dark blue background
+    surface: '#002455', // Darker blue surface
+    card: '#002455',
+    text: '#FFFFFF', // Light text
+    textSecondary: '#D1D5DB',
+    border: '#1F2937',
+    error: '#FF3838',
+    errorLight: '#DC0000',
+    success: '#10B981',
+    warning: '#F59E0B',
+    info: '#60A5FA',
     // ATS Friendly colors
-    atsBlue: '#3498DB',
-    atsGray: '#95A5A6',
-    atsLightGray: '#34495E',
+    atsBlue: '#60A5FA',
+    atsGray: '#9CA3AF',
+    atsLightGray: '#1F2937',
   },
 };
 

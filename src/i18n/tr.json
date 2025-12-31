@@ -11,7 +11,8 @@
     "back": "Geri",
     "done": "Tamam",
     "download": "İndir",
-    "share": "Paylaş"
+    "share": "Paylaş",
+    "ok": "Tamam"
   },
   "welcome": {
     "title": "Mükemmel CV'ni Oluştur",
@@ -34,6 +35,7 @@
   },
   "home": {
     "title": "Şablon Seç",
+    "subtitle": "Profesyonel bir CV şablonu seçin",
     "categories": {
       "student": "Öğrenciler & Juniorlar",
       "professional": "Profesyoneller",
@@ -108,12 +110,29 @@
       "certificates": "Sertifikalar",
       "links": "Bağlantılar",
       "add": "Ekle"
+    },
+    "title": "CV Oluştur",
+    "step": "Adım {{step}} / {{total}}",
+    "finish": "Bitir",
+    "comingSoon": "Yakında...",
+    "validation": {
+      "title": "Doğrulama Hatası",
+      "required": "Lütfen zorunlu alanları doldurun"
+    },
+    "success": {
+      "title": "Başarılı",
+      "message": "CV'niz başarıyla oluşturuldu!"
     }
   },
   "preview": {
     "title": "CV Önizleme",
     "download": "PDF İndir",
-    "save": "CV'yi Kaydet"
+    "save": "CV'yi Kaydet",
+    "saveSuccess": "Başarılı",
+    "saveMessage": "CV başarıyla kaydedildi!",
+    "saveError": "CV kaydedilemedi",
+    "pdfError": "PDF oluşturulamadı",
+    "error": "Hata"
   },
   "myCVs": {
     "title": "CV'lerim",
