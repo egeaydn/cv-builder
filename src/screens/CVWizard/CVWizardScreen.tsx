@@ -4,22 +4,26 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import { EducationFormModal } from '../../components/EducationFormModal';
+import { ExperienceFormModal } from '../../components/ExperienceFormModal';
+import { ProjectFormModal } from '../../components/ProjectFormModal';
 import { getTemplateById } from '../../data/templates';
 import { useI18n } from '../../i18n/I18nContext';
 import { RootStackParamList } from '../../navigation';
+import { createCV } from '../../services/firestore';
 import { useTheme } from '../../theme';
-import { PersonalInfo, CV, Education, Experience, Project, Skill, Extras } from '../../types';
+import { CV, Education, Experience, Extras, PersonalInfo, Project, Skill } from '../../types';
 
 type CVWizardScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -54,6 +58,14 @@ export const CVWizardScreen: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [extras, setExtras] = useState<Extras>({});
+
+  // Modal states
+  const [educationModalVisible, setEducationModalVisible] = useState(false);
+  const [experienceModalVisible, setExperienceModalVisible] = useState(false);
+  const [projectModalVisible, setProjectModalVisible] = useState(false);
+  const [editingEducation, setEditingEducation] = useState<Education | undefined>(undefined);
+  const [editingExperience, setEditingExperience] = useState<Experience | undefined>(undefined);
+  const [editingProject, setEditingProject] = useState<Project | undefined>(undefined);
 
   const totalSteps = 7;
 
@@ -90,24 +102,51 @@ export const CVWizardScreen: React.FC = () => {
       return;
     }
 
-    // Create CV object
-    const cv: CV = {
-      id: `cv_${Date.now()}`,
-      userId: 'temp_user', // TODO: Get from auth context
-      templateId: templateId,
-      language: 'en', // TODO: Get from i18n context
-      personalInfo,
-      education,
-      experience,
-      projects,
-      skills,
-      extras,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    setLoading(true);
 
-    // Navigate to Preview
-    navigation.navigate('Preview', { cv });
+    try {
+      // Create CV object
+      const cv: CV = {
+        id: `cv_${Date.now()}`,
+        userId: 'temp_user', // TODO: Get from auth context
+        templateId: templateId,
+        language: 'en', // TODO: Get from i18n context
+        personalInfo,
+        education,
+        experience,
+        projects,
+        skills,
+        extras,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      // Save to Firebase
+      await createCV(cv);
+
+      // Show success message
+      Alert.alert(
+        t('wizard.success.title', { defaultValue: 'Success' }),
+        t('wizard.success.message', { defaultValue: 'Your CV has been saved successfully!' }),
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Navigate to Preview
+              navigation.navigate('Preview', { cv });
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error('Error saving CV:', error);
+      Alert.alert(
+        t('wizard.error.title', { defaultValue: 'Error' }),
+        t('wizard.error.message', { defaultValue: 'Failed to save CV. Please try again.' })
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderStepContent = () => {
@@ -188,17 +227,284 @@ export const CVWizardScreen: React.FC = () => {
             />
           </View>
         );
-      default:
+      case 2:
+        // Education
         return (
           <View style={styles.stepContainer}>
-            <Text style={[styles.stepTitle, { color: colors.text }]}>
-              {t('wizard.steps.education', { defaultValue: 'Education' })}
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.education.title', { defaultValue: 'Education' })}
             </Text>
-            <Text style={[styles.comingSoon, { color: colors.textSecondary }]}>
-              {t('wizard.comingSoon', { defaultValue: 'Coming soon...' })}
-            </Text>
+            {education.map((edu, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                onPress={() => {
+                  setEditingEducation(edu);
+                  setEducationModalVisible(true);
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>{edu.school}</Text>
+                  <Text style={[styles.cardSubtitle, { color: colors.textSecondary }]}>{edu.degree}</Text>
+                  {edu.field && (
+                    <Text style={[styles.cardSubtitle, { color: colors.textSecondary, fontSize: 13, marginTop: 2 }]}>
+                      {edu.field}
+                    </Text>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setEducation(education.filter((_, i) => i !== index));
+                  }}
+                  style={{ padding: 8 }}
+                >
+                  <Ionicons name="trash-outline" size={20} color={colors.error || '#FF3B30'} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={[styles.addButton, { borderColor: colors.primary }]}
+              onPress={() => {
+                setEditingEducation(undefined);
+                setEducationModalVisible(true);
+              }}
+            >
+              <Ionicons name="add-circle-outline" size={24} color={colors.primary} />
+              <Text style={[styles.addButtonText, { color: colors.primary }]}>
+                {t('wizard.education.addEducation', { defaultValue: 'Add Education' })}
+              </Text>
+            </TouchableOpacity>
+
+            <EducationFormModal
+              visible={educationModalVisible}
+              education={editingEducation}
+              onSave={(newEducation) => {
+                if (editingEducation) {
+                  setEducation(education.map((e) => (e.id === editingEducation.id ? newEducation : e)));
+                } else {
+                  setEducation([...education, newEducation]);
+                }
+                setEditingEducation(undefined);
+              }}
+              onClose={() => {
+                setEducationModalVisible(false);
+                setEditingEducation(undefined);
+              }}
+            />
           </View>
         );
+
+      case 3:
+        // Experience
+        return (
+          <View style={styles.stepContainer}>
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.experience.title', { defaultValue: 'Experience' })}
+            </Text>
+            {experience.map((exp, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                onPress={() => {
+                  setEditingExperience(exp);
+                  setExperienceModalVisible(true);
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>{exp.position}</Text>
+                  <Text style={[styles.cardSubtitle, { color: colors.textSecondary }]}>{exp.company}</Text>
+                  {exp.location && (
+                    <Text style={[styles.cardSubtitle, { color: colors.textSecondary, fontSize: 13, marginTop: 2 }]}>
+                      {exp.location}
+                    </Text>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setExperience(experience.filter((_, i) => i !== index));
+                  }}
+                  style={{ padding: 8 }}
+                >
+                  <Ionicons name="trash-outline" size={20} color={colors.error || '#FF3B30'} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={[styles.addButton, { borderColor: colors.primary }]}
+              onPress={() => {
+                setEditingExperience(undefined);
+                setExperienceModalVisible(true);
+              }}
+            >
+              <Ionicons name="add-circle-outline" size={24} color={colors.primary} />
+              <Text style={[styles.addButtonText, { color: colors.primary }]}>
+                {t('wizard.experience.addExperience', { defaultValue: 'Add Experience' })}
+              </Text>
+            </TouchableOpacity>
+
+            <ExperienceFormModal
+              visible={experienceModalVisible}
+              experience={editingExperience}
+              onSave={(newExperience) => {
+                if (editingExperience) {
+                  setExperience(experience.map((e) => (e.id === editingExperience.id ? newExperience : e)));
+                } else {
+                  setExperience([...experience, newExperience]);
+                }
+                setEditingExperience(undefined);
+              }}
+              onClose={() => {
+                setExperienceModalVisible(false);
+                setEditingExperience(undefined);
+              }}
+            />
+          </View>
+        );
+
+      case 4:
+        // Projects
+        return (
+          <View style={styles.stepContainer}>
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.projects.title', { defaultValue: 'Projects' })}
+            </Text>
+            {projects.map((proj, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                onPress={() => {
+                  setEditingProject(proj);
+                  setProjectModalVisible(true);
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>{proj.title}</Text>
+                  {proj.description && (
+                    <Text style={[styles.cardSubtitle, { color: colors.textSecondary }]} numberOfLines={2}>
+                      {proj.description}
+                    </Text>
+                  )}
+                  {proj.technologies && proj.technologies.length > 0 && (
+                    <Text style={[styles.cardSubtitle, { color: colors.primary, fontSize: 12, marginTop: 4 }]}>
+                      {proj.technologies.join(', ')}
+                    </Text>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setProjects(projects.filter((_, i) => i !== index));
+                  }}
+                  style={{ padding: 8 }}
+                >
+                  <Ionicons name="trash-outline" size={20} color={colors.error || '#FF3B30'} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={[styles.addButton, { borderColor: colors.primary }]}
+              onPress={() => {
+                setEditingProject(undefined);
+                setProjectModalVisible(true);
+              }}
+            >
+              <Ionicons name="add-circle-outline" size={24} color={colors.primary} />
+              <Text style={[styles.addButtonText, { color: colors.primary }]}>
+                {t('wizard.projects.addProject', { defaultValue: 'Add Project' })}
+              </Text>
+            </TouchableOpacity>
+
+            <ProjectFormModal
+              visible={projectModalVisible}
+              project={editingProject}
+              onSave={(newProject) => {
+                if (editingProject) {
+                  setProjects(projects.map((p) => (p.id === editingProject.id ? newProject : p)));
+                } else {
+                  setProjects([...projects, newProject]);
+                }
+                setEditingProject(undefined);
+              }}
+              onClose={() => {
+                setProjectModalVisible(false);
+                setEditingProject(undefined);
+              }}
+            />
+          </View>
+        );
+
+      case 5:
+        // Skills
+        return (
+          <View style={styles.stepContainer}>
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.skills.title', { defaultValue: 'Skills' })}
+            </Text>
+            <TextInput
+              style={[styles.textArea, { backgroundColor: colors.surface, color: colors.text, borderColor: colors.border }]}
+              placeholder={t('wizard.skills.itemsPlaceholder', { defaultValue: 'e.g., JavaScript, Python, React' })}
+              placeholderTextColor={colors.textSecondary}
+              value={skills.map(s => s.name).join(', ')}
+              onChangeText={(text) => {
+                const skillNames = text.split(',').map(s => s.trim()).filter(s => s);
+                const newSkills: Skill[] = skillNames.map((name, i) => ({
+                  id: `skill_${i}`,
+                  name,
+                }));
+                setSkills(newSkills);
+              }}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+            />
+          </View>
+        );
+
+      case 6:
+        // Languages
+        return (
+          <View style={styles.stepContainer}>
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.extras.languages', { defaultValue: 'Languages' })}
+            </Text>
+            <TextInput
+              style={[styles.textArea, { backgroundColor: colors.surface, color: colors.text, borderColor: colors.border }]}
+              placeholder="e.g., English (Fluent), Turkish (Native)"
+              placeholderTextColor={colors.textSecondary}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+            />
+          </View>
+        );
+
+      case 7:
+        // Final Step - Review
+        return (
+          <View style={styles.stepContainer}>
+            <Text style={[styles.stepTitle, { color: colors.text, fontSize: 20, marginBottom: 16 }]}>
+              {t('wizard.review', { defaultValue: 'Review & Finish' })}
+            </Text>
+            <Text style={[styles.reviewText, { color: colors.textSecondary }]}>
+              Review your information and click Finish to create your CV.
+            </Text>
+            <View style={[styles.reviewCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              <Text style={[styles.reviewLabel, { color: colors.textSecondary }]}>Name</Text>
+              <Text style={[styles.reviewValue, { color: colors.text }]}>{personalInfo.fullName || 'Not provided'}</Text>
+              
+              <Text style={[styles.reviewLabel, { color: colors.textSecondary, marginTop: 12 }]}>Email</Text>
+              <Text style={[styles.reviewValue, { color: colors.text }]}>{personalInfo.email || 'Not provided'}</Text>
+              
+              <Text style={[styles.reviewLabel, { color: colors.textSecondary, marginTop: 12 }]}>Education</Text>
+              <Text style={[styles.reviewValue, { color: colors.text }]}>{education.length} items</Text>
+              
+              <Text style={[styles.reviewLabel, { color: colors.textSecondary, marginTop: 12 }]}>Experience</Text>
+              <Text style={[styles.reviewValue, { color: colors.text }]}>{experience.length} items</Text>
+            </View>
+          </View>
+        );
+
+      default:
+        return null;
     }
   };
 
@@ -384,6 +690,60 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  card: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontSize: 14,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    marginTop: 8,
+  },
+  addButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  reviewText: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  reviewCard: {
+    padding: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  reviewLabel: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  reviewValue: {
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 

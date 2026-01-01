@@ -5,7 +5,6 @@ import {
     doc,
     getDoc,
     getDocs,
-    orderBy,
     query,
     setDoc,
     Timestamp,
@@ -80,15 +79,21 @@ export const getCV = async (cvId: string): Promise<CV | null> => {
 export const getUserCVs = async (userId: string): Promise<CV[]> => {
   const q = query(
     collection(db, CVS_COLLECTION),
-    where('userId', '==', userId),
-    orderBy('updatedAt', 'desc')
+    where('userId', '==', userId)
   );
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((doc) => ({
+  const cvs = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   })) as CV[];
+  
+  // Sort by updatedAt on client side to avoid needing a composite index
+  return cvs.sort((a, b) => {
+    const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
+    const dateB = b.updatedAt instanceof Date ? b.updatedAt : new Date(b.updatedAt);
+    return dateB.getTime() - dateA.getTime();
+  });
 };
 
 export const updateCV = async (
