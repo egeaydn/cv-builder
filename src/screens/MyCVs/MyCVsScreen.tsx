@@ -64,10 +64,18 @@ export const MyCVsScreen: React.FC = () => {
     }, [])
   );
 
-  const handleDeleteCV = async (cvId: string) => {
+  const handleDeleteCV = async (cvId: string, cvName: string) => {
+    if (!cvId) {
+      Alert.alert(
+        t('myCVs.error.title', { defaultValue: 'Error' }),
+        'CV ID is missing. Cannot delete.'
+      );
+      return;
+    }
+
     Alert.alert(
       t('myCVs.delete.title', { defaultValue: 'Delete CV' }),
-      t('myCVs.delete.message', { defaultValue: 'Are you sure you want to delete this CV?' }),
+      t('myCVs.delete.message', { defaultValue: 'Are you sure you want to delete this CV?' }) + ` (${cvName})`,
       [
         {
           text: t('common.cancel', { defaultValue: 'Cancel' }),
@@ -78,17 +86,16 @@ export const MyCVsScreen: React.FC = () => {
           style: 'destructive',
           onPress: async () => {
             try {
+              console.log('Deleting CV with ID:', cvId);
               await deleteCV(cvId);
-              setCvs(cvs.filter((cv) => cv.id !== cvId));
-              Alert.alert(
-                t('myCVs.delete.successTitle', { defaultValue: 'Success' }),
-                t('myCVs.delete.successMessage', { defaultValue: 'CV deleted successfully' })
-              );
-            } catch (error) {
+              // Update local state to remove the deleted CV
+              setCvs(prevCvs => prevCvs.filter((cv) => cv.id !== cvId));
+              console.log('CV deleted successfully');
+            } catch (error: any) {
               console.error('Error deleting CV:', error);
               Alert.alert(
                 t('myCVs.error.title', { defaultValue: 'Error' }),
-                t('myCVs.error.deleteFailed', { defaultValue: 'Failed to delete CV. Please try again.' })
+                t('myCVs.error.deleteFailed', { defaultValue: 'Failed to delete CV. Please try again.' }) + '\n' + (error?.message || '')
               );
             }
           },
@@ -106,11 +113,13 @@ export const MyCVsScreen: React.FC = () => {
         style={[styles.cvCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
         onPress={() => navigation.navigate('Preview', { cv: item })}
       >
-        <Image
-          source={template?.previewImage || require('../../../assets/templates/placeholder.png')}
-          style={styles.cvPreview}
-          resizeMode="cover"
-        />
+        <View style={styles.cvPreviewContainer}>
+          <Image
+            source={template?.previewImage || require('../../../assets/templates/placeholder.png')}
+            style={styles.cvPreview}
+            resizeMode="cover"
+          />
+        </View>
         <View style={styles.cvInfo}>
           <Text style={[styles.cvName, { color: colors.text }]}>
             {item.personalInfo.fullName || t('myCVs.untitled', { defaultValue: 'Untitled CV' })}
@@ -125,7 +134,10 @@ export const MyCVsScreen: React.FC = () => {
         <View style={styles.cvActions}>
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => handleDeleteCV(item.id)}
+            onPress={(e) => {
+              e.stopPropagation();
+              handleDeleteCV(item.id, item.personalInfo.fullName || 'Untitled');
+            }}
           >
             <Ionicons name="trash-outline" size={20} color={colors.error || '#FF3B30'} />
           </TouchableOpacity>
@@ -221,10 +233,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  cvPreview: {
+  cvPreviewContainer: {
     width: 60,
     height: 80,
     borderRadius: 8,
+    overflow: 'hidden',
+  },
+  cvPreview: {
+    width: '100%',
+    height: '100%',
   },
   cvInfo: {
     flex: 1,

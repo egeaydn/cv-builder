@@ -83,10 +83,15 @@ export const getUserCVs = async (userId: string): Promise<CV[]> => {
   );
 
   const querySnapshot = await getDocs(q);
-  const cvs = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as CV[];
+  const cvs = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    const cv = {
+      id: doc.id,
+      ...data,
+    } as CV;
+    console.log('CV loaded:', cv.id, cv.personalInfo?.fullName);
+    return cv;
+  });
   
   // Sort by updatedAt on client side to avoid needing a composite index
   return cvs.sort((a, b) => {
@@ -108,8 +113,13 @@ export const updateCV = async (
 };
 
 export const deleteCV = async (cvId: string): Promise<void> => {
+  if (!cvId) {
+    throw new Error('CV ID is required for deletion');
+  }
+  console.log('Attempting to delete CV from Firestore:', cvId);
   const cvRef = doc(db, CVS_COLLECTION, cvId);
   await deleteDoc(cvRef);
+  console.log('CV deleted from Firestore successfully');
 };
 
 // ==================== TEMPLATES ====================

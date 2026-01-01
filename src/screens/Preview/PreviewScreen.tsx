@@ -5,14 +5,14 @@ import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import React, { useState } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Alert,
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { TemplateRenderer } from '../../components/CVTemplates';
 import { useI18n } from '../../i18n/I18nContext';
@@ -70,124 +70,260 @@ export const PreviewScreen: React.FC = () => {
     }
   };
 
+  const getTemplateHTML = (cv: CV) => {
+    const { personalInfo, education, experience, projects, skills } = cv;
+    
+    const baseStyles = `
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: Arial, sans-serif; }
+    `;
+
+    // Her template için özel HTML ve CSS
+    switch (cv.templateId) {
+      case 'junior-tech':
+        return `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                ${baseStyles}
+                body { background: #1A1A2E; color: #DDDDDD; }
+                .header { background: #16213E; padding: 30px; border-left: 6px solid #FEB05D; }
+                .name { font-size: 32px; font-weight: bold; color: #FFFFFF; margin-bottom: 4px; }
+                .title { font-size: 18px; color: #FEB05D; margin-bottom: 12px; font-weight: 600; }
+                .contact { font-size: 13px; color: #AAAAAA; margin-right: 12px; }
+                .content { padding: 30px; }
+                .section { margin-bottom: 24px; }
+                .section-title { font-size: 16px; font-weight: bold; color: #FEB05D; border-bottom: 2px solid #FEB05D; padding-bottom: 6px; margin-bottom: 12px; letter-spacing: 1px; }
+                .item { margin-bottom: 16px; }
+                .item-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+                .item-title { font-size: 16px; font-weight: 600; color: #FFFFFF; }
+                .item-date { font-size: 12px; color: #FEB05D; font-style: italic; }
+                .company { font-size: 14px; color: #AAAAAA; margin-bottom: 6px; }
+                .description { font-size: 13px; color: #CCCCCC; line-height: 18px; }
+                .skill { font-size: 14px; color: #FFFFFF; font-family: monospace; margin-bottom: 6px; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <div class="name">${personalInfo.fullName}</div>
+                ${personalInfo.title ? `<div class="title">${personalInfo.title}</div>` : ''}
+                <div>
+                  ${personalInfo.email ? `<span class="contact">${personalInfo.email}</span>` : ''}
+                  ${personalInfo.phone ? `<span class="contact">${personalInfo.phone}</span>` : ''}
+                  ${personalInfo.location ? `<span class="contact">${personalInfo.location}</span>` : ''}
+                </div>
+              </div>
+              <div class="content">
+                ${personalInfo.summary ? `
+                  <div class="section">
+                    <div class="section-title">PROFILE</div>
+                    <div class="description">${personalInfo.summary}</div>
+                  </div>
+                ` : ''}
+                ${skills && skills.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">TECHNICAL SKILLS</div>
+                    ${skills.map(s => `<div class="skill">→ ${s.name}</div>`).join('')}
+                  </div>
+                ` : ''}
+                ${experience && experience.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">EXPERIENCE</div>
+                    ${experience.map(exp => `
+                      <div class="item">
+                        <div class="item-header">
+                          <div class="item-title">${exp.position}</div>
+                          <div class="item-date">${exp.startDate} - ${exp.current ? 'Present' : exp.endDate}</div>
+                        </div>
+                        <div class="company">${exp.company}</div>
+                        ${exp.description ? `<div class="description">${exp.description}</div>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                ${education && education.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">EDUCATION</div>
+                    ${education.map(edu => `
+                      <div class="item">
+                        <div class="item-header">
+                          <div class="item-title">${edu.degree}</div>
+                          <div class="item-date">${edu.startDate} - ${edu.current ? 'Present' : edu.endDate}</div>
+                        </div>
+                        <div class="company">${edu.school}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            </body>
+          </html>
+        `;
+
+      case 'corporate-classic':
+        return `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                ${baseStyles}
+                body { background: #FFFFFF; }
+                .top-border { height: 8px; background: #1E3A5F; }
+                .header { text-align: center; padding: 30px 40px; border-bottom: 1px solid #CCCCCC; }
+                .name { font-size: 32px; font-weight: bold; color: #1E3A5F; margin-bottom: 6px; }
+                .title { font-size: 16px; color: #555555; margin-bottom: 12px; }
+                .contact { font-size: 12px; color: #666666; }
+                .content { padding: 40px; }
+                .section { margin-bottom: 24px; }
+                .section-title { font-size: 14px; font-weight: bold; color: #1E3A5F; letter-spacing: 1.5px; border-bottom: 2px solid #1E3A5F; padding-bottom: 4px; margin-bottom: 12px; }
+                .item { margin-bottom: 18px; }
+                .item-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+                .position { font-size: 14px; font-weight: 600; color: #1E3A5F; }
+                .company { font-size: 13px; color: #555555; margin-top: 2px; }
+                .date-range { font-size: 11px; color: #777777; font-style: italic; }
+                .description { font-size: 12px; color: #2B2A2A; line-height: 17px; }
+              </style>
+            </head>
+            <body>
+              <div class="top-border"></div>
+              <div class="header">
+                <div class="name">${personalInfo.fullName}</div>
+                ${personalInfo.title ? `<div class="title">${personalInfo.title}</div>` : ''}
+                <div class="contact">
+                  ${personalInfo.email || ''} ${personalInfo.phone ? `• ${personalInfo.phone}` : ''} ${personalInfo.location ? `• ${personalInfo.location}` : ''}
+                </div>
+              </div>
+              <div class="content">
+                ${personalInfo.summary ? `
+                  <div class="section">
+                    <div class="section-title">PROFESSIONAL SUMMARY</div>
+                    <div class="description">${personalInfo.summary}</div>
+                  </div>
+                ` : ''}
+                ${experience && experience.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">PROFESSIONAL EXPERIENCE</div>
+                    ${experience.map(exp => `
+                      <div class="item">
+                        <div class="item-header">
+                          <div>
+                            <div class="position">${exp.position}</div>
+                            <div class="company">${exp.company}</div>
+                          </div>
+                          <div class="date-range">${exp.startDate} - ${exp.current ? 'Present' : exp.endDate}</div>
+                        </div>
+                        ${exp.description ? `<div class="description">${exp.description}</div>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                ${education && education.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">EDUCATION</div>
+                    ${education.map(edu => `
+                      <div class="item">
+                        <div class="item-header">
+                          <div>
+                            <div class="position">${edu.degree}</div>
+                            <div class="company">${edu.school}</div>
+                          </div>
+                          <div class="date-range">${edu.startDate} - ${edu.current ? 'Present' : edu.endDate}</div>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                ${skills && skills.length > 0 ? `
+                  <div class="section">
+                    <div class="section-title">CORE COMPETENCIES</div>
+                    <div class="description">${skills.map(s => s.name).join(' • ')}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </body>
+          </html>
+        `;
+
+      // Diğer template'ler için de default StudentClean stili kullan
+      default:
+        return `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                ${baseStyles}
+                body { padding: 20px; color: #333; }
+                .header { background: #050E3C; color: white; padding: 24px; margin-bottom: 20px; }
+                .name { font-size: 28px; font-weight: bold; margin-bottom: 4px; }
+                .title { font-size: 18px; color: #88AAFF; margin-bottom: 8px; }
+                .contact { font-size: 14px; margin-top: 12px; }
+                .section { margin-bottom: 24px; }
+                .section-title { font-size: 20px; font-weight: bold; color: #050E3C; margin-bottom: 12px; border-bottom: 2px solid #050E3C; padding-bottom: 4px; }
+                .item { margin-bottom: 16px; }
+                .item-title { font-size: 16px; font-weight: 600; color: #050E3C; }
+                .item-subtitle { font-size: 15px; color: #002455; margin-top: 4px; }
+                .item-description { font-size: 14px; color: #555; line-height: 20px; margin-top: 4px; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <div class="name">${personalInfo.fullName}</div>
+                ${personalInfo.title ? `<div class="title">${personalInfo.title}</div>` : ''}
+                <div class="contact">
+                  ${personalInfo.email || ''} ${personalInfo.phone ? ` • ${personalInfo.phone}` : ''} ${personalInfo.location ? ` • ${personalInfo.location}` : ''}
+                </div>
+              </div>
+              ${personalInfo.summary ? `
+                <div class="section">
+                  <div class="section-title">Summary</div>
+                  <div class="item-description">${personalInfo.summary}</div>
+                </div>
+              ` : ''}
+              ${education && education.length > 0 ? `
+                <div class="section">
+                  <div class="section-title">Education</div>
+                  ${education.map(edu => `
+                    <div class="item">
+                      <div class="item-title">${edu.degree}</div>
+                      <div class="item-subtitle">${edu.school}</div>
+                      <div class="item-description">${edu.startDate} - ${edu.current ? 'Present' : edu.endDate || ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              ${experience && experience.length > 0 ? `
+                <div class="section">
+                  <div class="section-title">Experience</div>
+                  ${experience.map(exp => `
+                    <div class="item">
+                      <div class="item-title">${exp.position}</div>
+                      <div class="item-subtitle">${exp.company}</div>
+                      <div class="item-description">${exp.startDate} - ${exp.current ? 'Present' : exp.endDate || ''}</div>
+                      ${exp.description ? `<div class="item-description">${exp.description}</div>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              ${skills && skills.length > 0 ? `
+                <div class="section">
+                  <div class="section-title">Skills</div>
+                  <div class="item-description">${skills.map(s => s.name).join(', ')}</div>
+                </div>
+              ` : ''}
+            </body>
+          </html>
+        `;
+    }
+  };
+
   const handleDownloadPDF = async () => {
     setLoading(true);
     try {
-      // HTML template for PDF
-      const html = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <style>
-              body {
-                font-family: Arial, sans-serif;
-                padding: 20px;
-                color: #333;
-              }
-              .header {
-                border-bottom: 2px solid #050E3C;
-                padding-bottom: 16px;
-                margin-bottom: 20px;
-              }
-              .name {
-                font-size: 28px;
-                font-weight: bold;
-                color: #050E3C;
-                margin-bottom: 4px;
-              }
-              .title {
-                font-size: 18px;
-                color: #002455;
-                margin-bottom: 8px;
-              }
-              .contact {
-                font-size: 14px;
-                color: #666;
-              }
-              .section {
-                margin-bottom: 24px;
-              }
-              .section-title {
-                font-size: 20px;
-                font-weight: bold;
-                color: #050E3C;
-                margin-bottom: 12px;
-                border-bottom: 1px solid #E5E7EB;
-                padding-bottom: 4px;
-              }
-              .item {
-                margin-bottom: 16px;
-              }
-              .item-title {
-                font-size: 16px;
-                font-weight: 600;
-                color: #050E3C;
-              }
-              .item-subtitle {
-                font-size: 15px;
-                color: #002455;
-                margin-top: 4px;
-              }
-              .item-description {
-                font-size: 14px;
-                color: #555;
-                line-height: 20px;
-                margin-top: 4px;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="name">${cv.personalInfo.fullName}</div>
-              ${cv.personalInfo.title ? `<div class="title">${cv.personalInfo.title}</div>` : ''}
-              <div class="contact">
-                ${cv.personalInfo.email || ''}
-                ${cv.personalInfo.phone ? ` • ${cv.personalInfo.phone}` : ''}
-                ${cv.personalInfo.location ? ` • ${cv.personalInfo.location}` : ''}
-              </div>
-            </div>
-            ${cv.personalInfo.summary ? `
-              <div class="section">
-                <div class="section-title">Summary</div>
-                <div class="item-description">${cv.personalInfo.summary}</div>
-              </div>
-            ` : ''}
-            ${cv.education && cv.education.length > 0 ? `
-              <div class="section">
-                <div class="section-title">Education</div>
-                ${cv.education.map(edu => `
-                  <div class="item">
-                    <div class="item-title">${edu.degree}</div>
-                    <div class="item-subtitle">${edu.school}</div>
-                    <div class="item-description">${edu.startDate} - ${edu.current ? 'Present' : edu.endDate || ''}</div>
-                  </div>
-                `).join('')}
-              </div>
-            ` : ''}
-            ${cv.experience && cv.experience.length > 0 ? `
-              <div class="section">
-                <div class="section-title">Experience</div>
-                ${cv.experience.map(exp => `
-                  <div class="item">
-                    <div class="item-title">${exp.position}</div>
-                    <div class="item-subtitle">${exp.company}</div>
-                    <div class="item-description">${exp.startDate} - ${exp.current ? 'Present' : exp.endDate || ''}</div>
-                    ${exp.description ? `<div class="item-description">${exp.description}</div>` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            ` : ''}
-            ${cv.skills && cv.skills.length > 0 ? `
-              <div class="section">
-                <div class="section-title">Skills</div>
-                <div class="item-description">${cv.skills.map(s => s.name).join(', ')}</div>
-              </div>
-            ` : ''}
-          </body>
-        </html>
-      `;
-
+      const html = getTemplateHTML(cv);
       const { uri } = await Print.printToFileAsync({ html });
       await shareAsync(uri);
     } catch (error) {

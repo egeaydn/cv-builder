@@ -25,7 +25,6 @@ type WelcomeScreenNavigationProp = NativeStackNavigationProp<
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
 
-
 export const WelcomeScreen: React.FC = () => {
   const { colors } = useTheme();
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
