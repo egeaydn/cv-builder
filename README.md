@@ -1,50 +1,78 @@
-# Welcome to your Expo app 👋
+# CV Builder
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+CV Builder, modern teknolojilerle geliştirilen ve kullanıcılara kolayca özgeçmiş (CV) oluşturma imkanı sunan **çapraz platform (Android, iOS, Web)** destekli bir mobil/web uygulamasıdır. Bu proje ile kullanıcılar; kişisel bilgilerini, eğitim geçmişlerini ve iş tecrübelerini özelleştirilebilir ve şık bir arayüz ile rahatça kaydedebilir, yönetebilir ve dışa aktarabilirler.
 
-## Get started
+## Özellikler
 
-1. Install dependencies
+- Dinamik ve kullanıcı dostu bir arayüz
+- Çoklu dil desteği
+- Koyu/açık tema arasında geçiş
+- Firebase tabanlı kimlik doğrulama
+- Özgeçmiş düzenleme ve önizleme
+- PDF veya paylaşılabilir formatlarda dışa aktarma
+- Platformlar arası (iOS + Android + Web) çalışma
+- Dosya tabanlı routing yapısı ve bileşen tabanlı mimari
 
+## Kurulum ve Çalıştırma
+
+1. Bağımlılıkları yükleyin:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Uygulamayı başlatın:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+3. Çıkan seçenekler ile Android/iOS emülatörde, cihazda veya web üzerinde uygulamayı görüntüleyebilirsiniz.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+> Not: Çevre değişkenleri için `.env.example` dosyasını inceleyip, kendi `.env` dosyanızı oluşturmayı unutmayın.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Dosya & Klasör Yapısı
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+cv-builder/
+├── app/               # Expo Router ile sayfa ve ekranlar (örn: _layout.tsx ile ana kapsayıcı)
+├── assets/            # Görseller ve statik dosyalar
+├── components/        # Yeniden kullanılabilir React bileşenleri
+├── constants/         # Sabitler
+├── docs/              # Dokümantasyonlar
+├── hooks/             # Özel React Hook’ları
+├── scripts/           # Yardımcı script dosyaları
+├── src/               # Navigasyon, tema, i18n ve iş mantığı
+├── .env.example       # Ortam değişkenleri örnek dosyası
+├── package.json       # Proje bağımlılıkları ve script’ler
+└── ...                # Diğer config ve kök dosyalar
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### `app/_layout.tsx` Nasıl çalışır?
+Uygulamanın bütün ana sağlayıcılarını (`I18nProvider`, `AuthProvider`, `ThemeProvider`) sarar ve React Navigation altyapısı ile ekranlar arasındaki geçişi sağlar. Dosya tabanlı route yapısı sayesinde yeni bir ekran eklemek oldukça kolaydır.
 
-## Learn more
+## Teknolojiler & Kullanılan Araçlar
 
-To learn more about developing your project with Expo, look at the following resources:
+- Expo ve React Native
+- TypeScript
+- React Navigation
+- Firebase Auth
+- Expo Router
+- Temalandırma sistemi & çoklu dil desteği (i18n)
+- Modern UI bileşenleri (Tamagui, vector-icons, modal vs.)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Katkıda Bulunma
 
-## Join the community
+Her türlü PR ve issue için katkılarınızı bekleriz!
 
-Join our community of developers creating universal apps.
+1. Fork’layın
+2. Yeni bir branch oluşturun
+3. Değişikliklerinizi yapıp commit’leyin
+4. PR gönderin
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Lisans
+
+MIT
+
+---
+
+Daha fazlası ve detaylı dokümantasyon için:  
+➡️ [Proje ana dizinindeki kodlara bakmak için GitHub'a göz atabilirsiniz.](https://github.com/egeaydn/cv-builder)
